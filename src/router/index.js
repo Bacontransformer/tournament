@@ -20,7 +20,31 @@ const router = new VueRouter({
     {
       path: '/',
       redirect: '/login'
-    }
+    },
+    {
+      path: '/visitor',
+      component: () => import('../views/VisitorView.vue')
+    },
+    {
+      path: '/leader/register',
+      component: () => import('../views/LeaderRegisterView.vue')
+    },
+    {
+      path: '/referee/register',
+      component: () => import('../views/RefereeRegisterView.vue')
+    },
+    {
+      path: '/leader',
+      component: () => import('../views/LeaderView.vue')
+    },
+    {
+      path: '/referee',
+      component: () => import('../views/RefereeView.vue')
+    },
+    {
+      path: '/admin',
+      component: () => import('../views/AdminView.vue')
+    },
   ]
 })
 
