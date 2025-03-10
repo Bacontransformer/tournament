@@ -16,3 +16,6 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+document.title = '羽毛球赛事管理系统';
+
