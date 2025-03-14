@@ -41,13 +41,7 @@ export default {
       ],
       value: '',
       username: '',
-      password: '',
-      admin_token: '',
-      leader_token: '',
-      referee_token: '',
-      admin_id: '',
-      leader_id: '',
-      referee_id: ''
+      password: ''
     }
   },
   methods: {
@@ -78,21 +72,19 @@ export default {
           if (res.data.code == 1) {
             console.log('登录成功:', res.data);
             this.$message.success('登录成功');
+            const token = res.data.data.token;
             switch (this.value) {
               case '选项1':
-                this.admin_token = res.data.token;
-                this.admin_id = res.data.adminId;
-                this.$router.push('/admin'); 
+                this.$router.push('/admin');
+                localStorage.setItem('admin_token', token);
                 break;
               case '选项2':
-                this.leader_token = res.data.token;
-                this.leader_id = res.data.leader_id;
-                this.$router.push('/leader'); 
+                this.$router.push('/leader');
+                localStorage.setItem('leader_token', token);
                 break;
               case '选项3':
-                this.referee_token = res.data.token;
-                this.referee_id = res.data.referee_id;
                 this.$router.push('/referee');
+                localStorage.setItem('referee_token', token);
                 break;
               default:
                 this.$message.error('未知的角色');
@@ -102,7 +94,6 @@ export default {
           else {
             this.$message.error(res.data.msg);
           }
-          // 根据需要进行页面跳转或其他操作
         })
         .catch(error => {
           console.error('登录失败:', error);

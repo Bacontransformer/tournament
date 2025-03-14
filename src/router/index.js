@@ -31,6 +31,10 @@ const router = new VueRouter({
         {
           path: 'authorize/referee',
           component:() => import('../views/admin/AuthorizeRefereeView.vue')
+        },
+        {
+          path: 'event',
+          component:() => import('../views/admin/EventView.vue')
         }
       ]
     },
