@@ -35,6 +35,20 @@ const router = new VueRouter({
         {
           path: 'event',
           component:() => import('../views/admin/EventView.vue')
+        },
+        {
+          path: 'event/edit/:eventId?', // 新增路由（支持新建和编辑）
+          component: () => import('../views/admin/EventDialogView.vue')
+        },
+        {
+          path: 'event/match-a/:eventId',
+          component: () => import('../views/admin/MatchAView.vue'), // 注意路径层级
+          props: true // 启用路由参数传递
+        },
+        {
+          path: 'event/match-b/:eventId',
+          component: () => import('../views/admin/MatchBView.vue'),
+          props: true
         }
       ]
     },
