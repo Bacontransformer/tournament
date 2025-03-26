@@ -49,6 +49,11 @@ const router = new VueRouter({
           path: 'event/match-b/:eventId',
           component: () => import('../views/admin/MatchBView.vue'),
           props: true
+        },
+        {
+          path: 'event/match-a/:eventId/edit/:matchAId?',
+          component: () => import('../views/admin/MatchADialogView.vue'),
+          props: true
         }
       ]
     },
