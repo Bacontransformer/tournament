@@ -52,14 +52,6 @@
           </el-select>
         </el-form-item>
   
-        <el-form-item label="场地编号" required>
-          <el-input-number 
-            v-model="form.venueNumber"
-            :min="1"
-            class="input"
-          ></el-input-number>
-        </el-form-item>
-  
         <el-form-item label="赛制局数" required>
           <el-select v-model="form.gameCount" class="input">
             <el-option :value="1" label="1局"></el-option>
@@ -137,7 +129,6 @@
           eventId: this.eventId,
           teamAId: null,
           teamBId: null,
-          venueNumber: 1,
           gameCount: 1,
           winScore: 21,
           maxParticipationTimes: 10,

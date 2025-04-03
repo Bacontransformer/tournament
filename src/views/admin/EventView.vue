@@ -64,6 +64,7 @@
 
 <script>
 import axios from "axios";
+import { MessageBox } from "element-ui";
 
 export default {
   data() {
@@ -119,6 +120,12 @@ export default {
     },
     async deleteEvent(id) {
       try {
+        await MessageBox.confirm('确定删除该活动?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        });
+
         const params = new URLSearchParams();
         params.append("id", id);
         await axios.post("/api/event/delete", params, {
@@ -127,8 +134,12 @@ export default {
         this.$message.success("删除成功");
         this.loadData();
       } catch (error) {
-        this.$message.error("删除失败");
-        console.error(error);
+        if (error === 'cancel') {
+          this.$message.info('已取消删除');
+        } else {
+          this.$message.error("删除失败");
+          console.error(error);
+        }
       }
     },
     handlePageChange(page) {
