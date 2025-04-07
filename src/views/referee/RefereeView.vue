@@ -6,14 +6,14 @@
             <el-button type="text" @click="logout" class="logout-button">退出登录</el-button>
           </div>
           <div class="title-container">
-            <span>leader管理端</span>
+            <span>referee管理端</span>
           </div>
         </div>
       </el-header>
       <el-container>
         <el-aside width="100px">
-          <router-link to="/leader/1" class="aside-link">1</router-link>
-          <router-link to="/leader/2" class="aside-link">2</router-link>
+          <router-link to="/referee/match-a" class="aside-link">团体赛打分</router-link>
+          <router-link to="/referee/match-b" class="aside-link">趣味赛打分</router-link>
         </el-aside>
         <el-main>
           <router-view/>

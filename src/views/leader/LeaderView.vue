@@ -12,8 +12,9 @@
       </el-header>
       <el-container>
         <el-aside width="100px">
-          <router-link to="/referee/player" class="aside-link">队员管理</router-link>
-          <router-link to="/referee/match" class="aside-link">比赛管理</router-link>
+          <router-link to="/leader/player" class="aside-link">队员管理</router-link>
+          <router-link to="/leader/match-a" class="aside-link">团体赛选将</router-link>
+          <router-link to="/leader/match-b" class="aside-link">趣味赛选将</router-link>
         </el-aside>
         <el-main>
           <router-view/>

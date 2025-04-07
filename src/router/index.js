@@ -92,11 +92,47 @@ const router = new VueRouter({
     },
     {
       path: '/leader',
-      component: () => import('../views/leader/LeaderView.vue')
+      component: () => import('../views/leader/LeaderView.vue'),
+      redirect: '/leader/player',
+      children: [
+        {
+          path: 'player',
+          component: () => import('../views/leader/PlayerView.vue')
+        },
+        {
+          path: 'player/edit/:playerId?',
+          component: () => import('../views/leader/PlayerDialogView.vue'),
+          props: true
+        },
+        {
+          path: 'match-a',
+          component: () => import('../views/leader/MatchAView.vue')
+        },
+        {
+          path: 'match-b',
+          component: () => import('../views/leader/MatchBView.vue')
+        },
+        {
+          path: 'match-a/edit/:matchModeId',
+          component: () => import('../views/leader/MatchADialogView.vue'),
+          props: true
+        }
+      ]
     },
     {
       path: '/referee',
-      component: () => import('../views/referee/RefereeView.vue')
+      component: () => import('../views/referee/RefereeView.vue'),
+      redirect: '/referee/match-a',
+      children: [
+        {
+          path: 'match-a',
+          component: () => import('../views/referee/MatchAView.vue')
+        },
+        {
+          path: 'match-b',
+          component: () => import('../views/referee/MatchBView.vue')
+        }
+      ]
     }
   ]
 });
