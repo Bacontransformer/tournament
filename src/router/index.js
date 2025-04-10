@@ -46,11 +46,6 @@ const router = new VueRouter({
           props: true // 启用路由参数传递
         },
         {
-          path: 'event/match-b/:eventId',
-          component: () => import('../views/admin/MatchBView.vue'),
-          props: true
-        },
-        {
           path: 'event/match-a/:eventId/edit/:matchAId?',
           component: () => import('../views/admin/MatchADialogView.vue'),
           props: true
@@ -63,6 +58,16 @@ const router = new VueRouter({
         {
           path: 'event/match-a/:eventId/mode-dialog/:matchAId/:matchModeId?',
           component: () => import('../views/admin/MatchModeDialogView.vue'),
+          props: true
+        },
+        {
+          path: 'event/match-b/:eventId',
+          component: () => import('../views/admin/MatchBView.vue'),
+          props: true
+        },
+        {
+          path: 'event/match-b/:eventId/edit/:matchBId?',
+          component: () => import('../views/admin/MatchBDialogView.vue'),
           props: true
         }
       ]
@@ -131,6 +136,11 @@ const router = new VueRouter({
         {
           path: 'match-b',
           component: () => import('../views/referee/MatchBView.vue')
+        },
+        {
+          path: 'match-a/:matchModeId',
+          component: () => import('../views/referee/MatchAScoreView.vue'),
+          props: true
         }
       ]
     }
