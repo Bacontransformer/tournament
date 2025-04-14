@@ -121,6 +121,15 @@ const router = new VueRouter({
           path: 'match-a/edit/:matchModeId',
           component: () => import('../views/leader/MatchADialogView.vue'),
           props: true
+        },
+        {
+          path: 'match-b',
+          component: () => import('../views/leader/MatchBView.vue')
+        },
+        {
+          path: 'match-b/edit/:matchBId?',
+          component: () => import('../views/leader/MatchBDialogView.vue'),
+          props: true
         }
       ]
     },
