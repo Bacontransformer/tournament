@@ -150,6 +150,11 @@ const router = new VueRouter({
           path: 'match-a/:matchModeId',
           component: () => import('../views/referee/MatchAScoreView.vue'),
           props: true
+        },
+        {
+          path: 'match-b/:matchBId',
+          component: () => import('../views/referee/MatchBScoreView.vue'),
+          props: true
         }
       ]
     }
