@@ -1,71 +1,134 @@
 <template>
-  <div class="score-container">
-    <el-form label-width="120px" class="score-form">
-      <!-- A队得分项 -->
-      <el-form-item 
-        v-for="n in gameCount" 
-        :key="'a-'+n"
-        :label="`第${n}局A队得分`"
-      >
-        <div class="score-input">
-          <el-button 
-            @click="scores[`teamAScore${n}`]--" 
-            :disabled="scores[`teamAScore${n}`] <= 0"
-          >
-            -
-          </el-button>
-          <el-input-number 
-            v-model="scores[`teamAScore${n}`]"
-            :min="0"
-            controls-position="right"
-          />
-          <el-button @click="scores[`teamAScore${n}`]++">
-            +
-          </el-button>
+  <div class="optimized-score-container">
+    <el-card shadow="hover" class="score-card">
+      <div class="header-section">
+        <h2 class="match-title">比赛得分录入</h2>
+        <div class="match-info">
+          <el-tag type="info">比赛ID: {{ matchModeId }}</el-tag>
+          <el-tag type="success">总局数: {{ gameCount }}</el-tag>
         </div>
-      </el-form-item>
-
-      <!-- B队得分项 -->
-      <el-form-item 
-        v-for="n in gameCount" 
-        :key="'b-'+n"
-        :label="`第${n}局B队得分`"
-      >
-        <div class="score-input">
-          <el-button 
-            @click="scores[`teamBScore${n}`]--" 
-            :disabled="scores[`teamBScore${n}`] <= 0"
-          >
-            -
-          </el-button>
-          <el-input-number 
-            v-model="scores[`teamBScore${n}`]"
-            :min="0"
-            controls-position="right"
-          />
-          <el-button @click="scores[`teamBScore${n}`]++">
-            +
-          </el-button>
-        </div>
-      </el-form-item>
-
-      <div class="action-buttons">
-        <el-button type="primary" @click="handleSubmit">保存</el-button>
-        <el-button type="danger" @click="handleEndMatch">结束比赛</el-button>
-        <el-button @click="$router.push('/referee/match-a')">取消</el-button>
       </div>
-    </el-form>
+
+      <el-form 
+        label-position="top" 
+        class="optimized-score-form"
+        v-loading="loading"
+      >
+        <div class="round-group" v-for="n in gameCount" :key="n">
+          <el-card shadow="never" class="round-card">
+            <div class="round-header">
+              <span class="round-title">第{{ n }}局</span>
+              <el-tag v-if="showRoundWinner(n)" :type="roundWinnerType(n)" effect="dark">
+                {{ roundWinnerText(n) }}
+              </el-tag>
+            </div>
+            
+            <el-row :gutter="20">
+              <el-col :xs="24" :sm="12">
+                <div class="team-score a-team">
+                  <h4 class="team-label">A队得分</h4>
+                  <div class="score-control">
+                    <el-button 
+                      circle 
+                      @click="scores[`teamAScore${n}`]--" 
+                      :disabled="scores[`teamAScore${n}`] <= 0"
+                      icon="el-icon-minus"
+                    />
+                    <el-input-number 
+                      v-model="scores[`teamAScore${n}`]" 
+                      :min="0" 
+                      controls-position="right"
+                      class="score-input"
+                      @change="updateTotal"
+                    />
+                    <el-button 
+                      circle 
+                      @click="scores[`teamAScore${n}`]++"
+                      icon="el-icon-plus"
+                    />
+                  </div>
+                </div>
+              </el-col>
+
+              <el-col :xs="24" :sm="12">
+                <div class="team-score b-team">
+                  <h4 class="team-label">B队得分</h4>
+                  <div class="score-control">
+                    <el-button 
+                      circle 
+                      @click="scores[`teamBScore${n}`]--" 
+                      :disabled="scores[`teamBScore${n}`] <= 0"
+                      icon="el-icon-minus"
+                    />
+                    <el-input-number 
+                      v-model="scores[`teamBScore${n}`]" 
+                      :min="0" 
+                      controls-position="right"
+                      class="score-input"
+                      @change="updateTotal"
+                    />
+                    <el-button 
+                      circle 
+                      @click="scores[`teamBScore${n}`]++"
+                      icon="el-icon-plus"
+                    />
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
+          </el-card>
+        </div>
+
+        <div class="total-score">
+          <el-tag type="warning" class="total-tag">
+            A队总分: {{ totalA }}
+          </el-tag>
+          <el-tag type="warning" class="total-tag">
+            B队总分: {{ totalB }}
+          </el-tag>
+        </div>
+
+        <div class="optimized-actions">
+          <el-button 
+            type="primary" 
+            @click="handleSubmit"
+            :loading="submitting"
+            icon="el-icon-check"
+            class="action-btn"
+          >
+            保存进度
+          </el-button>
+          <el-button 
+            type="danger" 
+            @click="confirmEndMatch"
+            :loading="ending"
+            icon="el-icon-switch-button"
+            class="action-btn"
+          >
+            结束比赛
+          </el-button>
+          <el-button 
+            @click="$router.push('/referee/match-a')"
+            icon="el-icon-close"
+            class="action-btn"
+          >
+            返回列表
+          </el-button>
+        </div>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
 export default {
   props: ['matchModeId'],
   data() {
     return {
       matchAId: '',
-      gameCount: '',
+      gameCount: 3,
       scores: {
         teamAScore1: 0,
         teamBScore1: 0,
@@ -73,69 +136,122 @@ export default {
         teamBScore2: 0,
         teamAScore3: 0,
         teamBScore3: 0
-      }
+      },
+      loading: false,
+      submitting: false,
+      ending: false
+    }
+  },
+  computed: {
+    totalA() {
+      return Object.keys(this.scores)
+        .filter(k => k.startsWith('teamAScore'))
+        .reduce((sum, key) => sum + this.scores[key], 0)
+    },
+    totalB() {
+      return Object.keys(this.scores)
+        .filter(k => k.startsWith('teamBScore'))
+        .reduce((sum, key) => sum + this.scores[key], 0)
     }
   },
   async created() {
-    try {
-      const res = await axios.get(`/api/referee-match/get-a/${this.matchModeId}`, {
-        headers: { 
-          'referee_token': localStorage.getItem('referee_token') 
-        }
-      })
-      
-      this.matchAId = res.data.data.matchAId
-      this.gameCount = res.data.data.gameCount
-      this.scores = {
-        teamAScore1: res.data.data.teamARoundScore1,
-        teamBScore1: res.data.data.teamBRoundScore1,
-        teamAScore2: res.data.data.teamARoundScore2 || 0,
-        teamBScore2: res.data.data.teamBRoundScore2 || 0,
-        teamAScore3: res.data.data.teamARoundScore3 || 0,
-        teamBScore3: res.data.data.teamBRoundScore3 || 0
-      }
-    } catch (error) {
-      this.$message.error('数据加载失败')
-    }
+    await this.loadMatchData()
   },
   methods: {
+    async loadMatchData() {
+      this.loading = true
+      try {
+        const res = await axios.get(`/api/referee-match/get-a/${this.matchModeId}`, {
+          headers: {
+            'referee_token': localStorage.getItem('referee_token')
+          }
+        })
+
+        const data = res.data.data
+        this.matchAId = data.matchAId
+        this.gameCount = data.gameCount
+        this.scores = {
+          teamAScore1: data.teamARoundScore1,
+          teamBScore1: data.teamBRoundScore1,
+          teamAScore2: data.teamARoundScore2 || 0,
+          teamBScore2: data.teamBRoundScore2 || 0,
+          teamAScore3: data.teamARoundScore3 || 0,
+          teamBScore3: data.teamBRoundScore3 || 0
+        }
+      } catch (error) {
+        this.$message.error('数据加载失败')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    showRoundWinner(n) {
+      return this.scores[`teamAScore${n}`] !== this.scores[`teamBScore${n}`]
+    },
+
+    roundWinnerType(n) {
+      return this.scores[`teamAScore${n}`] > this.scores[`teamBScore${n}`] 
+        ? 'success' 
+        : 'danger'
+    },
+
+    roundWinnerText(n) {
+      return this.scores[`teamAScore${n}`] > this.scores[`teamBScore${n}`]
+        ? 'A队胜'
+        : 'B队胜'
+    },
+
+    updateTotal() {
+      // 触发计算属性更新
+    },
+
     async handleSubmit() {
+      this.submitting = true
       try {
         const scoreData = {
           matchAId: this.matchAId,
           matchModeId: this.matchModeId,
-          teamARoundScore1: this.scores.teamAScore1,
-          teamBRoundScore1: this.scores.teamBScore1,
-          teamARoundScore2: this.scores.teamAScore2,
-          teamBRoundScore2: this.scores.teamBScore2,
-          teamARoundScore3: this.scores.teamAScore3,
-          teamBRoundScore3: this.scores.teamBScore3
+          ...this.scores
         }
 
         await axios.post('/api/referee-match/score-a', scoreData, {
-          headers: { 
-            'referee_token': localStorage.getItem('referee_token') 
+          headers: {
+            'referee_token': localStorage.getItem('referee_token')
           }
         })
-        
-        this.$message.success('保存成功')
+
+        this.$message.success('得分保存成功')
       } catch (error) {
-        this.$message.error('保存失败')
+        this.$message.error('保存失败: ' + (error.response?.data?.message || ''))
+      } finally {
+        this.submitting = false
       }
     },
 
+    confirmEndMatch() {
+      this.$confirm(`确定要结束比赛吗？结束后将不可修改`, '确认结束', {
+        confirmButtonText: '确定结束',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger'
+      }).then(this.handleEndMatch)
+    },
+
     async handleEndMatch() {
+      this.ending = true
       try {
         await axios.post(`/api/referee-match/end-a/${this.matchModeId}`, null, {
-          headers: { 
-            'referee_token': localStorage.getItem('referee_token') 
+          headers: {
+            'referee_token': localStorage.getItem('referee_token')
           }
         })
-        
+
         this.$message.success('比赛已结束')
         this.$router.push('/referee/match-a')
       } catch (error) {
-        this.$message.error('结束比赛失败')
+        this.$message.error('结束失败: ' + (error.response?.data?.message || ''))
+      } finally {
+        this.ending = false
       }
     }
   }
@@ -143,22 +259,139 @@ export default {
 </script>
 
 <style scoped>
-.score-container {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
+.optimized-score-container {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 20px;
 }
-.score-form {
+
+.score-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.header-section {
   text-align: center;
+  margin-bottom: 32px;
 }
-.score-input {
+
+.match-title {
+  color: #303133;
+  margin-bottom: 16px;
+}
+
+.match-info {
   display: flex;
+  gap: 12px;
   justify-content: center;
-  gap: 10px;
-  margin: 10px 0;
+  margin-bottom: 24px;
 }
-.action-buttons {
-  margin-top: 30px;
+
+.round-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  border: 1px solid #ebeef5;
+}
+
+.round-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.round-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #409EFF;
+}
+
+.team-score {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.a-team {
+  background: #f0faff;
+  border: 1px solid #c6e2ff;
+}
+
+.b-team {
+  background: #fff6f0;
+  border: 1px solid #ffdbc7;
+}
+
+.team-label {
+  color: #606266;
+  margin: 0 0 12px 0;
+}
+
+.score-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.score-input {
+  width: 120px;
+}
+
+::v-deep .score-input .el-input__inner {
   text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.total-score {
+  margin: 32px 0;
+  text-align: center;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.total-tag {
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 20px;
+}
+
+.optimized-actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  min-width: 140px;
+}
+
+@media (max-width: 768px) {
+  .optimized-score-container {
+    padding: 0 12px;
+  }
+
+  .score-control {
+    gap: 8px;
+  }
+
+  .score-input {
+    width: 100px;
+  }
+
+  .team-score {
+    padding: 12px;
+  }
+
+  .action-btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 }
 </style>

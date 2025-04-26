@@ -1,29 +1,77 @@
 <template>
-  <div class="container">
-    <img src="@/assets/login-1.png" class="logo" />
-    <!-- 居中文字“欢迎来到羽毛球赛制系统” -->
-    <div class="text-center">欢迎来到羽毛球赛制系统</div>
-    <div class="visitor-link">
-      <router-link to="/visitor">游客访问</router-link>
-    </div>
-    <!-- 用户名输入框 -->
-    <div class="text-input">
-      <el-input placeholder="请输入用户名" v-model="username" class="input-field"></el-input>
-    </div>
-    <div class="text-input">
-      <!-- 密码输入框 -->
-      <el-input placeholder="请输入密码" v-model="password" show-password class="input-field"></el-input>
-    </div>
-    <div class="select-button">
-      <el-select v-model="value" placeholder="请选择角色" class="select-field">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
-    <el-button type="primary" @click="login" class="login-button">登录</el-button>
-    <div class="registration-links">
-      <router-link to="/leader/register" class="registration-link">领队注册</router-link>
-      <router-link to="/referee/register" class="registration-link">裁判注册</router-link>
+  <div class="login-container">
+    <!-- 动态背景层 -->
+    <div class="background-layer"></div>
+    
+    <!-- 登录卡片 -->
+    <div class="login-card">
+      <!-- 品牌展示区 -->
+      <div class="brand-section">
+        <img src="@/assets/login-1.png" class="brand-logo" />
+        <h1 class="brand-title">欢迎来到羽毛球赛制系统</h1>
+        <p class="brand-subtitle">Professional Badminton Tournament System</p>
+      </div>
+
+      <!-- 表单交互区 -->
+      <div class="form-section">
+        <el-button 
+          type="text" 
+          class="guest-entry"
+          @click="$router.push('/visitor')"
+        >
+          <i class="el-icon-view"></i> 游客通道
+        </el-button>
+
+        <el-input
+          v-model="username"
+          placeholder="用户名"
+          prefix-icon="el-icon-user"
+          class="modern-input"
+        ></el-input>
+
+        <el-input
+          v-model="password"
+          type="password"
+          placeholder="密码"
+          prefix-icon="el-icon-lock"
+          show-password
+          class="modern-input"
+        ></el-input>
+
+        <el-select
+          v-model="value"
+          placeholder="选择角色"
+          class="role-select"
+          prefix-icon="el-icon-s-custom"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :value="item.value"
+            :label="item.label"
+          />
+        </el-select>
+
+        <el-button 
+          type="primary" 
+          class="login-btn"
+          :loading="loading"
+          @click="login"
+        >
+          <template #default>
+            <i class="el-icon-s-promotion"></i> 立即登录
+          </template>
+        </el-button>
+
+        <div class="registration-links">
+          <router-link to="/leader/register" class="reg-link">
+            <i class="el-icon-edit-outline"></i> 领队注册
+          </router-link>
+          <router-link to="/referee/register" class="reg-link">
+            <i class="el-icon-document-checked"></i> 裁判注册
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,171 +87,253 @@ export default {
         { value: '选项2', label: '领队' },
         { value: '选项3', label: '裁判' }
       ],
-      value: '',
+      value: '选项1',
       username: '',
-      password: ''
+      password: '',
+      loading: false
     }
   },
   methods: {
-    login() {
+    async login() {
+      if (!this.validateForm()) return;
+      
+      this.loading = true;
+      try {
+        const response = await axios.post(this.getApiUrl(), {
+          username: this.username,
+          password: this.password
+        });
+
+        this.handleLoginResponse(response);
+      } catch (error) {
+        this.handleLoginError(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    validateForm() {
       if (!this.username || !this.password || !this.value) {
         this.$message.error('请填写所有字段');
-        return;
+        return false;
       }
-
+      return true;
+    },
+    getApiUrl() {
       const urlMap = {
         '选项1': '/api/admin/login',
         '选项2': '/api/leader/login',
         '选项3': '/api/referee/login'
       };
-
-      const url = urlMap[this.value];
-
-      if (!url) {
-        this.$message.error('请选择一个有效的角色');
-        return;
+      return urlMap[this.value];
+    },
+    handleLoginResponse(response) {
+      if (response.data.code === 1) {
+        console.log('登录成功:', response.data);
+        this.$message.success('登录成功');
+        const token = response.data.data.token;
+        switch (this.value) {
+          case '选项1':
+            this.$router.push('/admin');
+            localStorage.setItem('admin_token', token);
+            break;
+          case '选项2':
+            this.$router.push('/leader');
+            localStorage.setItem('leader_token', token);
+            break;
+          case '选项3':
+            this.$router.push('/referee');
+            localStorage.setItem('referee_token', token);
+            break;
+          default:
+            this.$message.error('未知的角色');
+            break;
+        }
+      } else {
+        this.$message.error(response.data.msg);
       }
-
-      axios.post(url, {
-        username: this.username,
-        password: this.password
-      })
-        .then(res => {
-          if (res.data.code == 1) {
-            console.log('登录成功:', res.data);
-            this.$message.success('登录成功');
-            const token = res.data.data.token;
-            switch (this.value) {
-              case '选项1':
-                this.$router.push('/admin');
-                localStorage.setItem('admin_token', token);
-                break;
-              case '选项2':
-                this.$router.push('/leader');
-                localStorage.setItem('leader_token', token);
-                break;
-              case '选项3':
-                this.$router.push('/referee');
-                localStorage.setItem('referee_token', token);
-                break;
-              default:
-                this.$message.error('未知的角色');
-                break;
-            }
-          }
-          else {
-            this.$message.error(res.data.msg);
-          }
-        })
-        .catch(error => {
-          console.error('登录失败:', error);
-          this.$message.error('登录失败，请检查用户名和密码');
-        });
+    },
+    handleLoginError(error) {
+      console.error('登录失败:', error);
+      this.$message.error('登录失败，请检查用户名和密码');
     }
   }
 }
 </script>
 
-<style>
-.container {
-  margin-top: 100px;
-  text-align: center;
-  padding: 0 20px;
-  /* 添加内边距 */
-}
-
-.logo {
-  width: 149px;
-  height: 138px;
-  margin-bottom: 20px;
-}
-
-.text-center {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.visitor-link {
-  margin-bottom: 20px;
-  /* 添加底部外边距 */
-}
-
-.select-button {
-  margin-bottom: 20px;
-}
-
-.text-input {
-  margin-bottom: 20px;
-}
-
-.input-field {
-  width: 100%;
-  max-width: 300px;
-}
-
-.select-field {
-  width: 100%;
-  max-width: 300px;
-}
-
-.login-button {
-  width: 100%;
-  max-width: 300px;
-  margin-bottom: 20px;
-  /* 添加底部外边距 */
-}
-
-.registration-links {
+<style lang="scss" scoped>
+.login-container {
+  height: 100vh;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
-  /* 添加链接之间的间距 */
-}
+  position: relative;
+  overflow: hidden;
 
-.registration-link {
-  text-decoration: none;
-  color: #409EFF;
-  /* 设置链接颜色 */
-  font-size: 14px;
-  /* 设置链接字体大小 */
-}
-
-@media (max-width: 600px) {
-  .container {
-    margin-top: 50px;
-  }
-
-  .logo {
-    width: 100px;
-    height: 95px;
-    margin-bottom: 10px;
-  }
-
-  .text-center {
-    margin-bottom: 10px;
-  }
-
-  .visitor-link {
-    margin-bottom: 10px;
-    /* 调整底部外边距 */
-  }
-
-  .input-field,
-  .select-field,
-  .login-button {
+  .background-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    z-index: 0;
   }
 
-  .registration-links {
-    flex-direction: column;
-    /* 在小屏幕上垂直排列 */
-    gap: 10px;
-    /* 调整链接之间的间距 */
-  }
+  .login-card {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    overflow: hidden;
+    transition: transform 0.3s ease;
 
-  .registration-link {
-    font-size: 12px;
-    /* 调整链接字体大小 */
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .brand-section {
+      padding: 40px 0;
+      background: linear-gradient(135deg, #409EFF 0%, #337ecc 100%);
+      color: white;
+      text-align: center;
+
+      .brand-logo {
+        width: 120px;
+        height: auto;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+      }
+
+      .brand-title {
+        font-size: 24px;
+        margin: 0;
+        letter-spacing: 2px;
+        font-weight: 600;
+      }
+
+      .brand-subtitle {
+        font-size: 12px;
+        opacity: 0.9;
+        margin: 8px 0 0;
+      }
+    }
+
+    .form-section {
+      padding: 40px 30px;
+
+      .modern-input {
+        margin-bottom: 24px;
+        transition: all 0.3s;
+
+        &:deep(.el-input__inner) {
+          height: 48px;
+          border-radius: 12px;
+          padding-left: 48px;
+          border: 1px solid #e4e7ed;
+          transition: all 0.3s;
+
+          &:hover {
+            border-color: #409EFF;
+          }
+
+          &:focus {
+            box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+          }
+        }
+
+        &:deep(.el-input__prefix) {
+          left: 15px;
+          font-size: 18px;
+          color: #909399;
+        }
+      }
+
+      .role-select {
+        width: 100%;
+        margin-bottom: 24px;
+
+        &:deep(.el-input__inner) {
+          border-radius: 12px;
+          height: 48px;
+          padding-left: 48px;
+        }
+      }
+
+      .login-btn {
+        width: 100%;
+        height: 48px;
+        border-radius: 12px;
+        font-size: 16px;
+        letter-spacing: 2px;
+        transition: all 0.3s;
+
+        i {
+          margin-right: 8px;
+          font-size: 18px;
+        }
+
+        &:hover {
+          transform: scale(1.02);
+          box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+        }
+      }
+
+      .guest-entry {
+        width: 100%;
+        color: #409EFF;
+        margin-bottom: 24px;
+        font-size: 14px;
+
+        i {
+          margin-right: 8px;
+        }
+      }
+
+      .registration-links {
+        margin-top: 24px;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+
+        .reg-link {
+          color: #666;
+          font-size: 13px;
+          text-decoration: none;
+          transition: color 0.3s;
+
+          i {
+            margin-right: 6px;
+            font-size: 14px;
+          }
+
+          &:hover {
+            color: #409EFF;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    width: 90% !important;
+    margin: 0 5%;
+
+    .brand-section {
+      padding: 30px 0;
+    }
+
+    .form-section {
+      padding: 30px 20px;
+    }
   }
 }
 </style>

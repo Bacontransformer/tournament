@@ -1,38 +1,35 @@
 <template>
-  <div>
-    <el-button type="primary" @click="goToCreate">+ 新建</el-button>
+  <div class="event-container">
+    <!-- 操作按钮 -->
+    <el-button type="primary" class="create-btn" @click="goToCreate">
+      <i class="el-icon-plus"></i> 新建活动
+    </el-button>
 
-    <el-table
-      :data="tableData"
-      style="width: 100%"
-      @row-click="handleRowClick"
+    <!-- 数据表格 -->
+    <el-table 
+      :data="tableData" 
+      style="width: 100%; margin-top: 20px;" 
+      @row-click="handleRowClick" 
       :row-class-name="tableRowClassName"
+      border
+      stripe
     >
-      <el-table-column
-        prop="name"
-        label="活动名称"
-        width="180"
-      ></el-table-column>
-      <el-table-column prop="stadium" label="体育馆"></el-table-column>
-      <el-table-column label="赛事类型">
+      <el-table-column prop="name" label="活动名称" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="stadium" label="体育馆" show-overflow-tooltip></el-table-column>
+      <el-table-column label="赛事类型" width="120">
         <template slot-scope="scope">
-          {{ scope.row.matchType === "传统比赛" ? "传统比赛" : "趣味赛" }}
+          <el-tag :type="scope.row.matchType === '传统比赛' ? 'success' : 'info'">
+            {{ scope.row.matchType }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="日期范围" width="220">
         <template slot-scope="scope">
-          {{ formatDate(scope.row.beginTime) }} 至
-          {{ formatDate(scope.row.endTime) }}
+          {{ formatDate(scope.row.beginTime) }} 至 {{ formatDate(scope.row.endTime) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="requiredAreaCount"
-        label="场地需求"
-      ></el-table-column>
-      <el-table-column
-        prop="requiredRefereeCount"
-        label="裁判需求"
-      ></el-table-column>
+      <el-table-column prop="requiredAreaCount" label="场地需求" width="100"></el-table-column>
+      <el-table-column prop="requiredRefereeCount" label="裁判需求" width="100"></el-table-column>
       <el-table-column label="创建时间" width="180">
         <template slot-scope="scope">
           {{ formatDateTime(scope.row.createTime) }}
@@ -40,25 +37,27 @@
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="150">
         <template slot-scope="scope">
-          <el-button size="mini" @click.stop="editEvent(scope.row.eventId)"
-            >修改</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click.stop="deleteEvent(scope.row.eventId)"
-            >删除</el-button
-          >
+          <el-button size="mini" type="primary" plain @click.stop="editEvent(scope.row.eventId)">
+            <i class="el-icon-edit"></i> 修改
+          </el-button>
+          <el-button size="mini" type="danger" plain @click.stop="deleteEvent(scope.row.eventId)">
+            <i class="el-icon-delete"></i> 删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @current-change="handlePageChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      :total="total"
-    ></el-pagination>
+    <!-- 分页器 -->
+    <div class="pagination-wrapper">
+      <el-pagination
+        background
+        layout="total, prev, pager, next, jumper"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="total"
+        @current-change="handlePageChange"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -150,12 +149,53 @@ export default {
 };
 </script>
 
-<style scoped>
-.clickable-row {
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-.clickable-row:hover {
-  background-color: #f5f7fa;
+<style scoped lang="scss">
+.event-container {
+  padding: 20px;
+
+  .create-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    i {
+      margin-right: 8px;
+      font-size: 16px;
+    }
+  }
+
+  .el-table {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    ::v-deep(.el-table__header th) {
+      background-color: #f5f7fa;
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    ::v-deep(.el-table__row) {
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #f0f9eb;
+      }
+    }
+
+    .el-tag {
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+  }
+
+  .pagination-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* 居中对齐 */
+  }
 }
 </style>

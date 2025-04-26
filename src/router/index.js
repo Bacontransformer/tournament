@@ -84,6 +84,18 @@ const router = new VueRouter({
         {
           path: 'match-b', // 相对于 /visitor
           component: () => import('../views/visitor/MatchBView.vue')
+        },
+        {
+          path: 'match-a/:status/:matchModeId',
+          name: 'MatchADetail',
+          component: () => import('../views/visitor/MatchADetailView.vue'),
+          props: true
+        },
+        {
+          path: 'match-b/:status/:matchModeId',
+          name: 'MatchBDetail',
+          component: () => import('../views/visitor/MatchBDetailView.vue'),
+          props: true
         }
       ]
     },

@@ -2,12 +2,7 @@
   <div class="leader-register-container">
     <el-card class="box-card">
       <div class="title">新增领队</div>
-      <el-form 
-        :model="leaderForm" 
-        :rules="rules" 
-        ref="leaderForm" 
-        label-width="120px"
-      >
+      <el-form :model="leaderForm" :rules="rules" ref="leaderForm" label-width="120px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="leaderForm.username"></el-input>
         </el-form-item>
@@ -32,12 +27,7 @@
         </el-form-item>
 
         <el-form-item label="年龄" prop="age">
-          <el-input-number 
-            v-model="leaderForm.age" 
-            :min="1" 
-            :max="120" 
-            controls-position="right"
-          ></el-input-number>
+          <el-input-number v-model="leaderForm.age" :min="1" :max="120" controls-position="right"></el-input-number>
         </el-form-item>
 
         <el-form-item label="队伍名称" prop="teamName">
@@ -45,11 +35,7 @@
         </el-form-item>
 
         <el-form-item label="简介" prop="introduction">
-          <el-input 
-            v-model="leaderForm.introduction" 
-            type="textarea" 
-            :rows="3"
-          ></el-input>
+          <el-input v-model="leaderForm.introduction" type="textarea" :rows="3"></el-input>
         </el-form-item>
 
         <el-form-item label="部门" prop="department">

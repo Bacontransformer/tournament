@@ -1,22 +1,58 @@
 <template>
-  <el-container>
-    <el-header>
+  <el-container class="visitor-container">
+    <!-- 头部优化 -->
+    <el-header class="visitor-header">
       <div class="header-content">
-        <div class="logout-container">
-          <el-button type="text" @click="logout" class="logout-button">退出登录</el-button>
-        </div>
+        <!-- 退出按钮移到左边 -->
+        <el-button 
+          type="danger" 
+          plain 
+          @click="logout"
+          class="logout-btn"
+        >
+          <i class="el-icon-switch-button"></i>
+          退出系统
+        </el-button>
+
+        <!-- 标题居中 -->
         <div class="title-container">
-          <span>赛事比分</span>
+          <h1 class="visitor-title">羽毛球赛制管理系统 游客端</h1>
+          <div class="sub-title">VISITOR PANEL</div>
         </div>
       </div>
     </el-header>
+
     <el-container>
-      <el-aside width="100px">
-        <router-link to="/visitor/match-a" class="aside-link">传统比赛</router-link>
-        <router-link to="/visitor/match-b" class="aside-link">趣味赛</router-link>
+      <!-- 侧边栏优化 -->
+      <el-aside width="160px" class="visitor-aside">
+        <el-menu
+          :default-active="$route.path"
+          class="side-menu"
+          background-color="#f8f9fa"
+          active-text-color="#409EFF"
+          router
+        >
+          <el-menu-item 
+            index="/visitor/match-a"
+            class="menu-item"
+          >
+            <i class="el-icon-s-data"></i>
+            <span>传统比赛</span>
+          </el-menu-item>
+
+          <el-menu-item 
+            index="/visitor/match-b"
+            class="menu-item"
+          >
+            <i class="el-icon-trophy"></i>
+            <span>趣味赛</span>
+          </el-menu-item>
+        </el-menu>
       </el-aside>
-      <el-main>
-        <router-view/>
+
+      <!-- 主内容区优化 -->
+      <el-main class="visitor-main">
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
@@ -30,83 +66,110 @@ export default {
       this.$router.push('/login');
     }
   }
-}
+};
 </script>
 
-<style>
-.el-header {
-  background-color: #409EFF; /* 蓝色 */
-  color: #fff;
-  text-align: center;
-  line-height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
+<style lang="scss" scoped>
+.visitor-container {
+  height: 100vh;
 
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
+  .visitor-header {
+    background: linear-gradient(135deg, #409EFF 0%, #337ecc 100%);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    height: 80px !important;
+    padding: 0 40px;
 
-.logout-container {
-  display: flex;
-  align-items: center;
-}
+    .header-content {
+      position: relative; /* 添加相对定位 */
+      display: flex;
+      justify-content: center; /* 标题居中 */
+      align-items: center;
+      height: 100%;
 
-.title-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+      .title-container {
+        text-align: center; /* 文字居中 */
 
-.logout-button {
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-}
+        .visitor-title {
+          font-size: 24px;
+          margin: 0;
+          letter-spacing: 2px;
+          color: white;
+        }
 
-.el-aside {
-  background-color: #f0f2f5; /* 浅灰色 */
-  color: #333;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* 确保 el-aside 占据整个高度 */
-}
+        .sub-title {
+          font-size: 12px;
+          opacity: 0.8;
+          color: white;
+        }
+      }
 
-.aside-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 280px; /* 调整高度以适应内容 */
-  padding: 10px 0;
-  color: #333;
-  text-decoration: none;
-  border-bottom: 1px solid #ccc;
-  transition: background-color 0.3s, color 0.3s;
-}
+      .logout-btn {
+        position: absolute; /* 绝对定位 */
+        left: 40px; /* 固定在左侧 */
+        top: 50%; /* 垂直居中 */
+        transform: translateY(-50%);
+        padding: 10px 20px;
+        border-radius: 20px;
 
-.aside-link:hover {
-  background-color: #e0e0e0;
-  color: #409EFF;
-}
+        i {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
 
-.aside-link:last-child {
-  border-bottom: none;
-}
+  .visitor-aside {
+    background: #f8f9fa;
+    border-right: 1px solid #ebeef5;
 
-.el-main {
-  background-color: #ffffff; /* 白色 */
-  color: #333;
-  text-align: center;
-  line-height: 160px;
+    .side-menu {
+      border-right: none;
+
+      .menu-item {
+        height: 60px;
+        line-height: 60px;
+        margin: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.3s;
+
+        &:hover {
+          background-color: #e9f5ff !important;
+        }
+
+        &.is-active {
+          background-color: #e9f5ff !important;
+          position: relative;
+
+          &::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: #409EFF;
+            border-radius: 2px;
+          }
+        }
+
+        i {
+          font-size: 18px;
+          margin-right: 10px;
+        }
+
+        span {
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .visitor-main {
+    background: #f5f7fa;
+    padding: 30px;
+    min-height: calc(100vh - 80px);
+  }
 }
 </style>
