@@ -1,4 +1,3 @@
-
 <template>
   <div class="optimized-match-container">
     <!-- 增强型查询栏 -->
@@ -90,6 +89,8 @@
                   <span class="score">{{ row.teamARoundScore1 || 0 }}</span>
                   <span class="separator">:</span>
                   <span class="score">{{ row.teamARoundScore2 || 0 }}</span>
+                  <span class="separator">:</span>
+                  <span class="score">{{ row.teamARoundScore3 || 0 }}</span>
                 </div>
               </div>
               
@@ -103,6 +104,8 @@
                   <span class="score">{{ row.teamBRoundScore1 || 0 }}</span>
                   <span class="separator">:</span>
                   <span class="score">{{ row.teamBRoundScore2 || 0 }}</span>
+                  <span class="separator">:</span>
+                  <span class="score">{{ row.teamBRoundScore3 || 0 }}</span>
                 </div>
               </div>
             </div>
@@ -152,6 +155,7 @@
     </el-card>
   </div>
 </template>
+
 <script>
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -172,7 +176,12 @@ export default {
         0: 'info',
         1: 'warning',
         2: 'success'
-      }
+      },
+      statusOptions: [
+        { value: '0', label: '未开始' },
+        { value: '1', label: '进行中' },
+        { value: '2', label: '已结束' }
+      ]
     }
   },
   created() {

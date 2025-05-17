@@ -89,7 +89,6 @@
           :min="0"
           class="input"
         />
-        <span class="tip-text">（0表示不允许替补）</span>
       </el-form-item>
 
       <!-- 年龄限制 -->
@@ -218,13 +217,12 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   min-height: 100vh;
-  padding: 20px;
 }
 
 .form {
-  width: 600px;
+  width: 450px;
   background: #fff;
   padding: 30px;
   border-radius: 8px;
@@ -241,7 +239,6 @@ export default {
 
 .button-group {
   text-align: center;
-  margin-top: 40px;
 }
 
 .team-option {

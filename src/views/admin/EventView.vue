@@ -14,7 +14,7 @@
       border
       stripe
     >
-      <el-table-column prop="name" label="活动名称" width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="name" label="活动名称" width="200" show-overflow-tooltip></el-table-column>
       <el-table-column prop="stadium" label="体育馆" show-overflow-tooltip></el-table-column>
       <el-table-column label="赛事类型" width="120">
         <template slot-scope="scope">

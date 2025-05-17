@@ -24,6 +24,14 @@
         show-overflow-tooltip
       ></el-table-column>
 
+      <el-table-column 
+        prop="mode" 
+        label="模式 " 
+        align="center"
+        min-width="120"
+        show-overflow-tooltip
+      ></el-table-column>
+
       <!-- 时间列 -->
       <el-table-column 
         label="开始时间" 

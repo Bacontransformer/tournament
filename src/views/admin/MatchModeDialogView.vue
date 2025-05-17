@@ -217,7 +217,7 @@
   
   .form-input {
     width: 100%;
-    max-width: 400px;
+    max-width: 320px;
   }
   
   .el-form-item {

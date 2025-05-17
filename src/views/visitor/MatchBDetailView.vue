@@ -66,6 +66,14 @@
                     <span class="label">选手2：</span>
                     <span class="name">{{ matchDetail.teamAPlayerName2 }}</span>
                   </div>
+                  <div v-if="matchDetail.teamAPlayerName3" class="player-item starter">
+                    <span class="label">选手3：</span>
+                    <span class="name">{{ matchDetail.teamAPlayerName3 }}</span>
+                  </div>
+                  <div v-if="matchDetail.teamAPlayerName4" class="player-item starter">
+                    <span class="label">选手4：</span>
+                    <span class="name">{{ matchDetail.teamAPlayerName4 }}</span>
+                  </div>
                   <template v-if="matchDetail.teamASubstitutePlayerName1">
                     <div class="substitute-divider">替补队员</div>
                     <div class="player-item substitute">
@@ -76,6 +84,18 @@
                       class="player-item substitute"
                     >
                       <span class="name">{{ matchDetail.teamASubstitutePlayerName2 }}</span>
+                    </div>
+                    <div 
+                      v-if="matchDetail.teamASubstitutePlayerName3" 
+                      class="player-item substitute"
+                    >
+                      <span class="name">{{ matchDetail.teamASubstitutePlayerName3 }}</span>
+                    </div>
+                    <div 
+                      v-if="matchDetail.teamASubstitutePlayerName4" 
+                      class="player-item substitute"
+                    >
+                      <span class="name">{{ matchDetail.teamASubstitutePlayerName4 }}</span>
                     </div>
                   </template>
                 </div>
@@ -97,6 +117,14 @@
                     <span class="label">选手2：</span>
                     <span class="name">{{ matchDetail.teamBPlayerName2 }}</span>
                   </div>
+                  <div v-if="matchDetail.teamBPlayerName3" class="player-item starter">
+                    <span class="label">选手3：</span>
+                    <span class="name">{{ matchDetail.teamBPlayerName3 }}</span>
+                  </div>
+                  <div v-if="matchDetail.teamBPlayerName4" class="player-item starter">
+                    <span class="label">选手4：</span>
+                    <span class="name">{{ matchDetail.teamBPlayerName4 }}</span>
+                  </div>
                   <template v-if="matchDetail.teamBSubstitutePlayerName1">
                     <div class="substitute-divider">替补队员</div>
                     <div class="player-item substitute">
@@ -107,6 +135,18 @@
                       class="player-item substitute"
                     >
                       <span class="name">{{ matchDetail.teamBSubstitutePlayerName2 }}</span>
+                    </div>
+                    <div 
+                      v-if="matchDetail.teamBSubstitutePlayerName3" 
+                      class="player-item substitute"
+                    >
+                      <span class="name">{{ matchDetail.teamBSubstitutePlayerName3 }}</span>
+                    </div>
+                    <div 
+                      v-if="matchDetail.teamBSubstitutePlayerName4" 
+                      class="player-item substitute"
+                    >
+                      <span class="name">{{ matchDetail.teamBSubstitutePlayerName4 }}</span>
                     </div>
                   </template>
                 </div>

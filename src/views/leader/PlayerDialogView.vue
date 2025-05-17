@@ -38,14 +38,6 @@
         />
       </el-form-item>
 
-      <el-form-item label="部门" prop="department">
-        <el-input 
-          v-model="formData.department" 
-          placeholder="请输入所属部门"
-          class="form-input"
-        />
-      </el-form-item>
-
       <el-form-item label="电话" prop="phone">
         <el-input 
           v-model="formData.phone" 
@@ -61,7 +53,7 @@
           class="form-input"
         >
           <el-option label="队长" value="队长" />
-          <el-option label="副队长" value="副隊長" />
+          <el-option label="副队长" value="副队长" />
           <el-option label="队员" value="队员" />
         </el-select>
       </el-form-item>
@@ -100,10 +92,10 @@ export default {
   data() {
     return {
       formData: {
+        playerId: this.playerId || null,
         name: '',
         gender: '',
         age: null,
-        department: '',
         phone: '',
         role: '',
         isActive: true

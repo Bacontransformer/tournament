@@ -270,8 +270,7 @@ export default {
 }
 
 .form-input {
-  width: 100%;
-  max-width: 320px;
+  width: 500px;
 }
 
 .el-form-item {

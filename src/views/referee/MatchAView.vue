@@ -40,6 +40,12 @@
           align="center"
         />
         <el-table-column 
+          prop="mode" 
+          label="模式" 
+          width="180"
+          align="center"
+        />
+        <el-table-column 
           label="状态" 
           width="140"
           align="center"

@@ -174,7 +174,7 @@ export default {
 
   .pagination-center {
     margin-top: 20px;
-    text-align: right;
+    text-align: center; /* 修改为居中对齐 */
   }
 }
 </style>

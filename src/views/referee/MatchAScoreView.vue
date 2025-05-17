@@ -30,12 +30,12 @@
                   <div class="score-control">
                     <el-button 
                       circle 
-                      @click="scores[`teamAScore${n}`]--" 
-                      :disabled="scores[`teamAScore${n}`] <= 0"
+                      @click="scores[`teamARoundScore${n}`]--" 
+                      :disabled="scores[`teamARoundScore${n}`] <= 0"
                       icon="el-icon-minus"
                     />
                     <el-input-number 
-                      v-model="scores[`teamAScore${n}`]" 
+                      v-model="scores[`teamARoundScore${n}`]" 
                       :min="0" 
                       controls-position="right"
                       class="score-input"
@@ -43,7 +43,7 @@
                     />
                     <el-button 
                       circle 
-                      @click="scores[`teamAScore${n}`]++"
+                      @click="scores[`teamARoundScore${n}`]++"
                       icon="el-icon-plus"
                     />
                   </div>
@@ -56,12 +56,12 @@
                   <div class="score-control">
                     <el-button 
                       circle 
-                      @click="scores[`teamBScore${n}`]--" 
-                      :disabled="scores[`teamBScore${n}`] <= 0"
+                      @click="scores[`teamBRoundScore${n}`]--" 
+                      :disabled="scores[`teamBRoundScore${n}`] <= 0"
                       icon="el-icon-minus"
                     />
                     <el-input-number 
-                      v-model="scores[`teamBScore${n}`]" 
+                      v-model="scores[`teamBRoundScore${n}`]" 
                       :min="0" 
                       controls-position="right"
                       class="score-input"
@@ -69,7 +69,7 @@
                     />
                     <el-button 
                       circle 
-                      @click="scores[`teamBScore${n}`]++"
+                      @click="scores[`teamBRoundScore${n}`]++"
                       icon="el-icon-plus"
                     />
                   </div>
@@ -130,12 +130,12 @@ export default {
       matchAId: '',
       gameCount: 3,
       scores: {
-        teamAScore1: 0,
-        teamBScore1: 0,
-        teamAScore2: 0,
-        teamBScore2: 0,
-        teamAScore3: 0,
-        teamBScore3: 0
+        teamARoundScore1: 0,
+        teamBRoundScore1: 0,
+        teamARoundScore2: 0,
+        teamBRoundScore2: 0,
+        teamARoundScore3: 0,
+        teamBRoundScore3: 0
       },
       loading: false,
       submitting: false,
@@ -171,12 +171,12 @@ export default {
         this.matchAId = data.matchAId
         this.gameCount = data.gameCount
         this.scores = {
-          teamAScore1: data.teamARoundScore1,
-          teamBScore1: data.teamBRoundScore1,
-          teamAScore2: data.teamARoundScore2 || 0,
-          teamBScore2: data.teamBRoundScore2 || 0,
-          teamAScore3: data.teamARoundScore3 || 0,
-          teamBScore3: data.teamBRoundScore3 || 0
+          teamARoundScore1: data.teamARoundScore1,
+          teamBRoundScore1: data.teamBRoundScore1,
+          teamARoundScore2: data.teamARoundScore2 || 0,
+          teamBRoundScore2: data.teamBRoundScore2 || 0,
+          teamARoundScore3: data.teamARoundScore3 || 0,
+          teamBRoundScore3: data.teamBRoundScore3 || 0
         }
       } catch (error) {
         this.$message.error('数据加载失败')
@@ -392,6 +392,7 @@ export default {
   .action-btn {
     width: 100%;
     margin-bottom: 8px;
+
   }
 }
 </style>

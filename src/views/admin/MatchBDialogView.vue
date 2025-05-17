@@ -126,7 +126,6 @@
           :min="0"
           class="mid-width"
         />
-        <span class="tip-text">（0表示不允许替补）</span>
       </el-form-item>
 
       <!-- 年龄限制 -->
@@ -317,7 +316,7 @@ export default {
 
 <style scoped>
 .dialog-container {
-  max-width: 680px;
+  max-width: 500px;
   margin: 20px auto;
   padding: 30px;
   background: #fff;
@@ -330,7 +329,7 @@ export default {
 }
 
 .mid-width {
-  width: 400px;
+  width: 300px;
 }
 
 .el-form-item {

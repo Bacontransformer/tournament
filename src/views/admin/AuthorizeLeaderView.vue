@@ -21,13 +21,13 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="用户名" width="180" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="phone" label="手机号" width="180" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="name" label="姓名" width="150" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="teamName" label="队伍名" width="200" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="username" label="用户名" width="100" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="phone" label="手机号" width="150" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="name" label="姓名" width="100" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="teamName" label="队伍名" width="120" show-overflow-tooltip></el-table-column>
       <el-table-column prop="gender" label="性别" width="100" align="center"></el-table-column>
       <el-table-column prop="age" label="年龄" width="100" align="center"></el-table-column>
-      <el-table-column prop="department" label="部门" width="200" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="department" label="部门" width="150" show-overflow-tooltip></el-table-column>
     </el-table>
 
     <!-- 分页器 -->
@@ -177,7 +177,7 @@ export default {
 
   .pagination-center {
     margin-top: 20px;
-    text-align: right;
+    text-align: center; /* 修改为居中对齐 */
   }
 }
 </style>

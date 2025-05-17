@@ -22,7 +22,7 @@ const router = new VueRouter({
     {
       path: '/admin',
       component: () => import('../views/admin/AdminView.vue'),
-      redirect: '/admin/authorize/leader',
+      redirect: '/admin/event',
       children: [
         {
           path: 'authorize/leader',

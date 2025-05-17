@@ -48,8 +48,8 @@
 
         <el-form-item>
           <el-button type="primary" @click="submitForm('leaderForm')">保存</el-button>
-          <el-button type="primary" plain @click="resetForm('leaderForm')" style="margin-left: 10px;">取消</el-button>
-          <el-button type="primary" plain @click="goToLogin" style="margin-left: 10px;">去登录</el-button>
+          <el-button type="primary" plain @click="resetForm('leaderForm')" style="margin-left: 10px;">清空</el-button>
+          <el-button type="primary" plain @click="goToLogin" style="margin-left: 10px;">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>

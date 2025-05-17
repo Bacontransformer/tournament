@@ -32,6 +32,14 @@
           active-text-color="#409EFF"
           router
         >
+        <el-menu-item 
+            index="/admin/event"
+            class="menu-item"
+          >
+            <i class="el-icon-trophy"></i>
+            <span>赛事管理</span>
+          </el-menu-item>
+          
           <el-menu-item 
             index="/admin/authorize/leader"
             class="menu-item"
@@ -48,13 +56,7 @@
             <span>裁判授权</span>
           </el-menu-item>
 
-          <el-menu-item 
-            index="/admin/event"
-            class="menu-item"
-          >
-            <i class="el-icon-trophy"></i>
-            <span>赛事管理</span>
-          </el-menu-item>
+          
         </el-menu>
       </el-aside>
 
